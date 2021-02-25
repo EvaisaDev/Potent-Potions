@@ -5,7 +5,7 @@
 	<GameEffectComponent 
 		effect="CUSTOM"
 		custom_effect_id=""
-		frames="120">
+		frames="-1">
 	</GameEffectComponent> 
 
 	<ShotEffectComponent>
