@@ -73,6 +73,15 @@ if ( #projectiles > 0 ) then
 					end
 					
 					--Ordered alphabetically below
+	
+					local area_damage_components = EntityGetComponent(projectile_id, "AreaDamageComponent")
+					if area_damage_components ~= nil then
+						for i,area_damage_component in ipairs(area_damage_components) do
+							if ComponentGetValue2(area_damage_component, "entities_with_tag") == "homing_target" then
+								ComponentSetValue2(area_damage_component, "entities_with_tag", "prey")
+							end
+						end
+					end		
 					
 					if(c.bounces ~= c_defaults.bounces)then
 						if(projectile_component ~= nil)then
@@ -111,7 +120,16 @@ if ( #projectiles > 0 ) then
 							ComponentSetValue2(projectile_component, "friendly_fire", value)
 						end
 					end
-
+					
+					local homing_components = EntityGetComponent(projectile_id, "HomingComponent")
+					if homing_components ~= nil then
+						for i,homing_component in ipairs(homing_components) do
+							if ComponentGetValue2(homing_component, "target_tag") == "homing_target" then
+								ComponentSetValue2(homing_component, "target_tag", "prey")
+							end
+						end
+					end
+					
 					if(c.knockback_force ~= c_defaults.knockback_force)then
 						if(projectile_component ~= nil)then
 							default_knockback_force = ComponentGetValue2(projectile_component, "knockback_force")
