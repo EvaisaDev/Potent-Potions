@@ -111,12 +111,47 @@ if ( #projectiles > 0 ) then
 						end
 					end
 					
+					local area_damage_components = EntityGetComponent(projectile_id, "AreaDamageComponent")
+					if area_damage_components ~= nil then
+						for i,area_damage_component in ipairs(area_damage_components) do
+							if ComponentGetValue2(area_damage_component, "entities_with_tag") == "homing_target" then
+								ComponentSetValue2(area_damage_component, "entities_with_tag", "prey")
+							end
+						end
+					end	
+
+
+					if(c.bounces ~= c_defaults.bounces)then
+						if(projectile_component ~= nil)then
+							default_bounces = ComponentGetValue2(projectile_component, "bounces_left")
+							ComponentSetValue2(projectile_component, "bounces_left", default_bounces + c.bounces)
+						end
+					end
+
+					local homing_components = EntityGetComponent(projectile_id, "HomingComponent")
+					if homing_components ~= nil then
+						for i,homing_component in ipairs(homing_components) do
+							if ComponentGetValue2(homing_component, "target_tag") == "homing_target" then
+								ComponentSetValue2(homing_component, "target_tag", "prey")
+							end
+						end
+					end
+
+
 					if(c.knockback_force ~= c_defaults.knockback_force)then
 						if(projectile_component ~= nil)then
 							default_knockback_force = ComponentGetValue2(projectile_component, "knockback_force")
 							ComponentSetValue2(projectile_component, "knockback_force", default_knockback_force + c.knockback_force)
 						end
 					end
+
+					if(c.speed_multiplier ~= c_defaults.speed_multiplier)then
+						vel_x, vel_y = ComponentGetValue2(velocity_component, "mVelocity")
+						if(velocity_component ~= nil)then
+							ComponentSetValue2(velocity_component, "mVelocity", vel_x * c.speed_multiplier, vel_y * c.speed_multiplier)
+						end
+					end
+
 
 					if(c.sprite ~= c_defaults.sprite)then
 						if(sprite_component ~= nil)then
