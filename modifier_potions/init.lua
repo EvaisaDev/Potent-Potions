@@ -1,6 +1,3 @@
-dofile("data/scripts/gun/gun_enums.lua")
-dofile("data/scripts/gun/gun_actions.lua")
-
 ModLuaFileAppend( "data/scripts/lib/utilities.lua", "mods/modifier_potions/files/scripts/append_utilities.lua" );
 
 dofile_once("mods/modifier_potions/files/scripts/utilities.lua")
@@ -80,41 +77,52 @@ function build_potion_name(in_string)
 	end
 end	
 
-potion_count = 0
 
-dofile("data/scripts/gun/gun.lua")
-dofile("data/scripts/gun/gunaction_generated.lua")
-dofile("data/scripts/gun/gunshoteffects_generated.lua")
 
-oldEntityLoad = EntityLoad
-EntityLoad = function() end
-Reflection_RegisterProjectile = function() end
-BeginProjectile = function() end
-EndProjectile = function() end
-RegisterProjectile = function() end
-RegisterGunAction = function() end
-RegisterGunShotEffects = function() end
-BeginTriggerTimer = function() end
-BeginTriggerHitWorld = function() end
-BeginTriggerDeath = function() end
-EndTrigger = function() end
-SetProjectileConfigs = function() end
-StartReload = function() end
-ActionUsesRemainingChanged = function() end
-ActionUsed = function() end
-LogAction = function() end
-OnActionPlayed = function() end
-OnNotEnoughManaForAction = function() end
-draw_actions = function() end
-draw_action = function() end
 -- no changes
 function OnMagicNumbersAndWorldSeedInitialized()
+	potion_count = 0
+
+	dofile("data/scripts/gun/gun_enums.lua")
+	dofile("data/scripts/gun/gun_actions.lua")
+
+
+	dofile("data/scripts/gun/gun.lua")
+	dofile("data/scripts/gun/gunaction_generated.lua")
+	dofile("data/scripts/gun/gunshoteffects_generated.lua")
+	
+	oldEntityLoad = EntityLoad
+	EntityLoad = function() end
+	Reflection_RegisterProjectile = function() end
+	BeginProjectile = function() end
+	EndProjectile = function() end
+	RegisterProjectile = function() end
+	RegisterGunAction = function() end
+	RegisterGunShotEffects = function() end
+	BeginTriggerTimer = function() end
+	BeginTriggerHitWorld = function() end
+	BeginTriggerDeath = function() end
+	EndTrigger = function() end
+	SetProjectileConfigs = function() end
+	StartReload = function() end
+	ActionUsesRemainingChanged = function() end
+	ActionUsed = function() end
+	LogAction = function() end
+	OnActionPlayed = function() end
+	OnNotEnoughManaForAction = function() end
+	draw_actions = function() end
+	draw_action = function() end
+	
+	get_content = ModTextFileGetContent
+	set_content = ModTextFileSetContent
+
+
 	local xml2lua = dofile("mods/modifier_potions/lib/xml2lua/xml2lua.lua")
 	local handler = dofile("mods/modifier_potions/lib/xml2lua/xmlhandler/tree.lua")
 
 
 	local parser = xml2lua.parser(handler)
-	local modifier_base = ModTextFileGetContent("mods/modifier_potions/files/entities/base_modifier_effect.xml")
+	local modifier_base = get_content("mods/modifier_potions/files/entities/base_modifier_effect.xml")
 	for k, v in pairs(actions)do
 		if(v.type == ACTION_TYPE_MODIFIER)then
 			--extra_modifiers["POTENT_POTIONS_"..v.id] = v.action
@@ -187,7 +195,7 @@ function OnMagicNumbersAndWorldSeedInitialized()
 
 			--print(file_content)
 
-			ModTextFileSetContent("mods/modifier_potions/files/entities/status_entities/POTENT_POTIONS_"..v.id..".xml", file_content)
+			set_content("mods/modifier_potions/files/entities/status_entities/POTENT_POTIONS_"..v.id..".xml", file_content)
 
 			--print(ModTextFileGetContent("mods/modifier_potions/files/entities/status_entities/POTENT_POTIONS_"..v.id..".xml"))
 			
@@ -195,7 +203,7 @@ function OnMagicNumbersAndWorldSeedInitialized()
 	end
 
 	
-	material_base = ModTextFileGetContent("data/materials.xml")
+	material_base = get_content("data/materials.xml")
 
 	xml2lua = dofile("mods/modifier_potions/lib/xml2lua/xml2lua.lua")
 	handler = dofile("mods/modifier_potions/lib/xml2lua/xmlhandler/tree.lua")
@@ -328,7 +336,7 @@ function OnMagicNumbersAndWorldSeedInitialized()
 			table.insert(handler.root.Materials.CellData, {
 				_attr = {
 					name = string.lower("POTENT_POTIONS_"..v.id.."_LIQUID"),
-					ui_name = build_potion_name(GameTextGetTranslatedOrNot(v.name)),
+					ui_name = GameTextGetTranslatedOrNot(v.name) == "" and v.name or build_potion_name(GameTextGetTranslatedOrNot(v.name)),
 					tags = "[liquid],[water],[magic_liquid]",
 					burnable="0",
 					density="1.11",
@@ -384,7 +392,7 @@ function OnMagicNumbersAndWorldSeedInitialized()
 
 	file_content = xml2lua.toXml(handler.root, "Materials", 0)
 
-	ModTextFileSetContent("data/materials.xml", file_content)
+	set_content("data/materials.xml", file_content)
 	EntityLoad = oldEntityLoad
 end
 --[[
