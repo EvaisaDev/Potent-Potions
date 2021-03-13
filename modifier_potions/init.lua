@@ -138,7 +138,9 @@ function OnMagicNumbersAndWorldSeedInitialized()
 			dont_draw_actions = true
 			reflecting = true
 			
+			current_reload_time = 0
 			v.action( 1, 1 )
+			c.reload_time = current_reload_time
 
 			reflecting = false
 			dont_draw_actions = false
