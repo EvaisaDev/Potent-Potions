@@ -156,6 +156,7 @@ if ( #projectiles > 0 ) then
 					if(c.sprite ~= c_defaults.sprite)then
 						if(sprite_component ~= nil)then
 							ComponentSetValue2(sprite_component, "image_file", c.sprite)
+							EntityRefreshSprite(projectile_id, sprite_component)
 						end
 					end
 					
