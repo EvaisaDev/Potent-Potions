@@ -103,13 +103,6 @@ if ( #projectiles > 0 ) then
 							ComponentSetValue2(projectile_component, "friendly_fire", value)
 						end
 					end
-
-					if(c.speed_multiplier ~= c_defaults.speed_multiplier)then
-						vel_x, vel_y = ComponentGetValue2(velocity_component, "mVelocity")
-						if(velocity_component ~= nil)then
-							ComponentSetValue2(velocity_component, "mVelocity", vel_x * c.speed_multiplier, vel_y * c.speed_multiplier)
-						end
-					end
 					
 					local area_damage_components = EntityGetComponent(projectile_id, "AreaDamageComponent")
 					if area_damage_components ~= nil then
