@@ -156,6 +156,13 @@ if ( #projectiles > 0 ) then
 						end
 					end
 
+					if(c.lifetime_add ~= c_defaults.lifetime_add)then
+						if(projectile_component ~= nil)then
+							default_lifetime_add = ComponentGetValue2(projectile_component, "lifetime")
+							ComponentSetValue2(projectile_component, "lifetime", default_lifetime_add + c.lifetime_add)
+						end
+					end
+
 					if(c.speed_multiplier ~= c_defaults.speed_multiplier)then
 						vel_x, vel_y = ComponentGetValue2(velocity_component, "mVelocity")
 						if(velocity_component ~= nil)then
