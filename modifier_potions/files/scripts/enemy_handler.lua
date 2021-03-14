@@ -99,14 +99,11 @@ if ( #projectiles > 0 ) then
 					
 					--Ordered alphabetically below
 	
-					local area_damage_components = EntityGetComponent(projectile_id, "AreaDamageComponent")
-					if area_damage_components ~= nil then
-						for i,area_damage_comp in ipairs(area_damage_components) do
-							if ComponentGetValue2(area_damage_comp, "entities_with_tag") == "homing_target" then
-								ComponentSetValue2(area_damage_comp, "entities_with_tag", "prey")
-							end
+					for i,area_damage_component in ipairs(EntityGetComponent(projectile_id, "AreaDamageComponent") or {}) do
+						if ComponentGetValue2(area_damage_component, "entities_with_tag") == "homing_target" then
+							ComponentSetValue2(area_damage_component, "entities_with_tag", "prey")
 						end
-					end		
+					end	
 					
 					if(c.bounces ~= c_defaults.bounces)then
 						if(projectile_component ~= nil)then
@@ -146,15 +143,11 @@ if ( #projectiles > 0 ) then
 						end
 					end
 					
-					local homing_components = EntityGetComponent(projectile_id, "HomingComponent")
-					if homing_components ~= nil then
-						for i,homing_component in ipairs(homing_components) do
-							if ComponentGetValue2(homing_component, "target_tag") == "homing_target" then
-								ComponentSetValue2(homing_component, "target_tag", "prey")
-							end
+					for i,homing_component in ipairs(EntityGetComponent(projectile_id, "HomingComponent") or {}) do
+						if ComponentGetValue2(homing_component, "target_tag") == "homing_target" then
+							ComponentSetValue2(homing_component, "target_tag", "prey")
 						end
 					end
-
 
 					if(c.knockback_force ~= c_defaults.knockback_force)then
 						if(projectile_component ~= nil)then
@@ -169,7 +162,6 @@ if ( #projectiles > 0 ) then
 							ComponentSetValue2(velocity_component, "mVelocity", vel_x * c.speed_multiplier, vel_y * c.speed_multiplier)
 						end
 					end
-
 
 					if(c.sprite ~= c_defaults.sprite)then
 						if(sprite_component ~= nil)then
