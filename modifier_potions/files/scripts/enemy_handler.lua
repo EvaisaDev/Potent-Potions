@@ -112,10 +112,31 @@ if ( #projectiles > 0 ) then
 						end
 					end
 
+					if(c.damage_electricity_add ~= c_defaults.damage_electricity_add)then
+						if(projectile_component ~= nil)then
+							default_damage_electricity_add = ComponentObjectGetValue2(projectile_component, "damage_by_type", "electricity")
+							ComponentObjectSetValue2(projectile_component, "damage_by_type", "electricity", default_damage_electricity_add + c.damage_electricity_add)
+						end
+					end
+					
 					if(c.damage_explosion_add ~= c_defaults.damage_explosion_add)then
 						if(projectile_component ~= nil)then
 							default_damage_explosion_add = ComponentObjectGetValue2(projectile_component, "config_explosion", "damage")
 							ComponentObjectSetValue2(projectile_component, "config_explosion", "damage", default_damage_explosion_add + c.damage_explosion_add)
+						end
+					end
+
+					if(c.damage_fire_add ~= c_defaults.damage_fire_add)then
+						if(projectile_component ~= nil)then
+							default_damage_fire_add = ComponentObjectGetValue2(projectile_component, "damage_by_type", "fire")
+							ComponentObjectSetValue2(projectile_component, "damage_by_type", "fire", default_damage_fire_add + c.damage_fire_add)
+						end
+					end
+
+					if(c.damage_melee_add ~= c_defaults.damage_melee_add)then
+						if(projectile_component ~= nil)then
+							default_damage_melee_add = ComponentObjectGetValue2(projectile_component, "damage_by_type", "melee")
+							ComponentObjectSetValue2(projectile_component, "damage_by_type", "melee", default_damage_melee_add + c.damage_melee_add)
 						end
 					end
 
