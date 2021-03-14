@@ -159,7 +159,9 @@ if ( #projectiles > 0 ) then
 					if(c.lifetime_add ~= c_defaults.lifetime_add)then
 						if(projectile_component ~= nil)then
 							default_lifetime_add = ComponentGetValue2(projectile_component, "lifetime")
-							ComponentSetValue2(projectile_component, "lifetime", default_lifetime_add + c.lifetime_add)
+							if default_lifetime_add >= 0 then
+								ComponentSetValue2(projectile_component, "lifetime", max(0, default_lifetime_add + c.lifetime_add))
+							end
 						end
 					end
 
