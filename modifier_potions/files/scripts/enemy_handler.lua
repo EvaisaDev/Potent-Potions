@@ -99,14 +99,11 @@ if ( #projectiles > 0 ) then
 					
 					--Ordered alphabetically below
 	
-					local area_damage_components = EntityGetComponent(projectile_id, "AreaDamageComponent")
-					if area_damage_components ~= nil then
-						for i,area_damage_comp in ipairs(area_damage_components) do
-							if ComponentGetValue2(area_damage_comp, "entities_with_tag") == "homing_target" then
-								ComponentSetValue2(area_damage_comp, "entities_with_tag", "prey")
-							end
+					for i,area_damage_component in ipairs(EntityGetComponent(projectile_id, "AreaDamageComponent") or {}) do
+						if ComponentGetValue2(area_damage_component, "entities_with_tag") == "homing_target" then
+							ComponentSetValue2(area_damage_component, "entities_with_tag", "prey")
 						end
-					end		
+					end	
 					
 					if(c.bounces ~= c_defaults.bounces)then
 						if(projectile_component ~= nil)then
@@ -115,10 +112,31 @@ if ( #projectiles > 0 ) then
 						end
 					end
 
+					if(c.damage_electricity_add ~= c_defaults.damage_electricity_add)then
+						if(projectile_component ~= nil)then
+							default_damage_electricity_add = ComponentObjectGetValue2(projectile_component, "damage_by_type", "electricity")
+							ComponentObjectSetValue2(projectile_component, "damage_by_type", "electricity", default_damage_electricity_add + c.damage_electricity_add)
+						end
+					end
+					
 					if(c.damage_explosion_add ~= c_defaults.damage_explosion_add)then
 						if(projectile_component ~= nil)then
 							default_damage_explosion_add = ComponentObjectGetValue2(projectile_component, "config_explosion", "damage")
 							ComponentObjectSetValue2(projectile_component, "config_explosion", "damage", default_damage_explosion_add + c.damage_explosion_add)
+						end
+					end
+
+					if(c.damage_fire_add ~= c_defaults.damage_fire_add)then
+						if(projectile_component ~= nil)then
+							default_damage_fire_add = ComponentObjectGetValue2(projectile_component, "damage_by_type", "fire")
+							ComponentObjectSetValue2(projectile_component, "damage_by_type", "fire", default_damage_fire_add + c.damage_fire_add)
+						end
+					end
+
+					if(c.damage_melee_add ~= c_defaults.damage_melee_add)then
+						if(projectile_component ~= nil)then
+							default_damage_melee_add = ComponentObjectGetValue2(projectile_component, "damage_by_type", "melee")
+							ComponentObjectSetValue2(projectile_component, "damage_by_type", "melee", default_damage_melee_add + c.damage_melee_add)
 						end
 					end
 
@@ -146,20 +164,25 @@ if ( #projectiles > 0 ) then
 						end
 					end
 					
-					local homing_components = EntityGetComponent(projectile_id, "HomingComponent")
-					if homing_components ~= nil then
-						for i,homing_component in ipairs(homing_components) do
-							if ComponentGetValue2(homing_component, "target_tag") == "homing_target" then
-								ComponentSetValue2(homing_component, "target_tag", "prey")
-							end
+					for i,homing_component in ipairs(EntityGetComponent(projectile_id, "HomingComponent") or {}) do
+						if ComponentGetValue2(homing_component, "target_tag") == "homing_target" then
+							ComponentSetValue2(homing_component, "target_tag", "prey")
 						end
 					end
-
 
 					if(c.knockback_force ~= c_defaults.knockback_force)then
 						if(projectile_component ~= nil)then
 							default_knockback_force = ComponentGetValue2(projectile_component, "knockback_force")
 							ComponentSetValue2(projectile_component, "knockback_force", default_knockback_force + c.knockback_force)
+						end
+					end
+
+					if(c.lifetime_add ~= c_defaults.lifetime_add)then
+						if(projectile_component ~= nil)then
+							default_lifetime_add = ComponentGetValue2(projectile_component, "lifetime")
+							if default_lifetime_add >= 0 then
+								ComponentSetValue2(projectile_component, "lifetime", math.max(0, default_lifetime_add + c.lifetime_add))
+							end
 						end
 					end
 
@@ -169,7 +192,6 @@ if ( #projectiles > 0 ) then
 							ComponentSetValue2(velocity_component, "mVelocity", vel_x * c.speed_multiplier, vel_y * c.speed_multiplier)
 						end
 					end
-
 
 					if(c.sprite ~= c_defaults.sprite)then
 						if(sprite_component ~= nil)then
@@ -191,8 +213,8 @@ if ( #projectiles > 0 ) then
 								collide_with_grid=true,
 								color=0,
 								cosmetic_force_create=true,
-								count_max=23,
-								count_min=21,
+								count_max=c.trail_material_amount + 3,
+								count_min=c.trail_material_amount + 1,
 								create_real_particles=false,
 								delay_frames=0,
 								direction_random_deg=0,
